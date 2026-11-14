@@ -5,6 +5,87 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] - 2026-11-14
+
+Forking and Renaming: this is a continuation fork of CCP Games'
+[`ccp-stencil`](https://github.com/ccpgames/ccp-stencil) (`ccpstencil` 0.8.0).
+
+### Changed
+
+- **Renamed**: the package _and_ module are now called `batstencil` and the
+  command line tool `bat-stencil` (it can also be run via `python -m batstencil`)
+- Now depends on [`batutils`](https://github.com/doddi79/batutils) (instead of
+  `ccptools`) and [`allconf`](https://github.com/doddi79/allconf) (instead of
+  `alviss`), and requires Python 3.10+ (tested on 3.10-3.14)
+- `AlvissContext` is now `AllConfContext` (`AlvissContext` is kept as a
+  deprecated alias) and the `{% embed %}` tag's `alviss=True` argument is now
+  `allconf=True` (`alviss=True` still works)
+- `render()` of the `DirectoryRenderer` (and the command line) now returns/
+  prints the paths of the files actually written, i.e. with names set via
+  `{% setfilename %}`, not the template names
+  ([ccp-stencil#10](https://github.com/ccpgames/ccp-stencil/issues/10))
+- Directory templates are crawled in sorted order (so rendering is deterministic)
+- Templates, embedded files and rendered output are read/written as UTF-8
+- The `FileRenderer` also treats an existing directory as an output directory
+  (not only paths ending with a slash)
+- `render_stencil()` and `guess_context_by_argument()` accept no context (or
+  `None`) as well as `IContext` and `ITemplate` instances
+- `DirectoryTemplate.target_name`, `target_path` and `skip_me` were removed
+  since the names (and copies) of directories are now decided while rendering
+  (see `{% repeat_for %}`)
+- Loggers are now named after their modules (`batstencil.*`)
+- Modernized packaging (`pyproject.toml` license metadata, `python -m build`)
+  and the GitHub workflows (unit tests on Python 3.10-3.14 for pushes to `main`
+  and all pull requests and a PyPI release workflow that checks that the
+  release tag matches the package version)
+
+### Added
+
+- A `{% repeat_for item in items %}` tag (and `{% repeat_for k, v in d.items() %}`)
+  that makes the `DirectoryRenderer` render a directory (when used in its
+  `__stencil_meta__` file) or a file once per item, with the loop variables in
+  the context of everything inside it (use `{% setfilename %}` to name each
+  copy) ([ccp-stencil#11](https://github.com/ccpgames/ccp-stencil/issues/11))
+- A `__stencil__` "dynamic context" variable in every template with the
+  `version`, `template_name` and `template_path` and, when rendering
+  directories, the `template_root`, `template_relative_path`, `source_dir`,
+  `output_root`, `output_dir` and `{% repeat_for %}` info (`loop` and `loops`)
+  ([ccp-stencil#14](https://github.com/ccpgames/ccp-stencil/issues/14))
+- A `TemplateRenderError` raised by the `DirectoryRenderer` naming the template
+  (and line) that failed to render, and template file names in Jinja2 errors
+  and tracebacks in general (`FileTemplate` now compiles with the file name)
+  ([ccp-stencil#12](https://github.com/ccpgames/ccp-stencil/issues/12))
+- A warning when `{% setfilename %}` renders an empty name (which is ignored)
+  ([ccp-stencil#15](https://github.com/ccpgames/ccp-stencil/issues/15))
+- `py=True` for the `{% embed %}` tag (resolving `${__PY__:...}` with `allconf=True`)
+- An `UnsafePurgeError`: the `DirectoryRenderer` now refuses to purge (delete)
+  the current working directory or any of its parents, the home directory, a
+  file system root or a directory containing the template
+- `--version` for the command line and nicer command line errors for template
+  errors and `-a` arguments without a `=`
+- A `fidelius` extra (`pip install batstencil[fidelius]`)
+- A task-oriented [Public API index](docs/api-index.md) (for humans and LLMs alike)
+
+### Fixed
+
+- The `base64` filter split values longer than 57 bytes into multiple lines
+  (it now always returns a single line, and accepts `bytes`)
+- The `FileRenderer` rendered every template twice
+- The `{% embed %}` tag ignored `fidelius=True` and didn't look for files
+  relative to the template doing the embedding
+- `AlvissContext.update()` crashed
+- `StringRenderer` (and thus `render_stencil`) crashed when no context was set
+- An empty `{% setfilename %}` in a template rendered with a `FileRenderer`
+  ignored the output file name given to the renderer
+- `-a` command line arguments without a `=` crashed with a `TypeError`
+- `STENCIL_TEMPLATE_PATH` only supported `;` as a separator (the OS path
+  separator, e.g. `:` on Linux, now works too)
+
+### Removed
+
+- Leftover sandbox/scratch files from the repo root
+
+
 ## [0.8.0] - 2024-06-04
 
 ## Changed
