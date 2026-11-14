@@ -1,6 +1,6 @@
 import unittest
 
-from ccpstencil.stencils import *
+from batstencil.stencils import *
 
 import os
 import pathlib
