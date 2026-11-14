@@ -9,3 +9,7 @@ venv*/
 
 # IDEA Stuff
 .idea/
+# Build / packaging
+*.egg-info/
+build/
+dist/

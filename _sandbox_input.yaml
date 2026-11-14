@@ -1,9 +1,0 @@
-name: Bob
-age: 7
-colors:
-  favorite: Blue
-  weakness: Yellow
-foo:
-  skip_module: false
-  module:
-    name: yomoma

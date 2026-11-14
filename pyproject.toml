@@ -1,57 +1,67 @@
 [build-system]
-requires = [ "setuptools>=42", "wheel" ]
+requires = [ "setuptools>=77", "wheel" ]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ccpstencil"
+name = "batstencil"
 dynamic = ["version"]
-description = "An Alviss powered Template renderer where the context input can be files and entire directory structures can be rendered."
+description = "An AllConf and Jinja2 powered template renderer where the context input can be files and entire directory structures can be rendered (a continuation fork of CCP Games' ccp-stencil)."
 readme = { file = "README.md", content-type = "text/markdown" }
-license = { file = "LICENSE" }
+license = "MIT"
+license-files = [ "LICENSE" ]
+requires-python = ">=3.10"
 authors = [
-    { name = "Thordur Matthiasson", email = "thordurm@ccpgames.com" }
+    { name = "Thordur Matthiasson", email = "doddi79@gmail.com" }
 ]
-keywords = [ "alviss", "template", "render", "jinja2", "tools", "ccp", "utils" ]
-classifiers = [  # https://pypi.org/classifiers/
-    "Development Status :: 3 - Alpha",
-
-    "License :: OSI Approved :: MIT License",
+keywords = [ "allconf", "template", "render", "jinja2", "scaffolding", "bootstrap", "tools", "utils" ]
+classifiers = [
+    "Development Status :: 4 - Beta",
 
     "Intended Audience :: Developers",
 
+    "Environment :: Console",
+
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 
     "Topic :: Software Development",
+    "Topic :: Software Development :: Code Generators",
     "Topic :: Software Development :: Libraries",
     "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Text Processing :: Markup",
     "Topic :: Utilities"
 ]
 
 dependencies = [
-    "ccptools >=1.1, <2",
-    "alviss >= 3.3, <4",
-    "jinja2 >= 3.1, <4"
+    "batutils >=2.2, <3",
+    "allconf >=4.0.2, <5",
+    "jinja2 >=3.1, <4"
+]
+
+[project.optional-dependencies]
+fidelius = [
+    "allconf[fidelius] >=4.0.2, <5"
 ]
 
 [project.scripts]
-ccp-stencil = "ccpstencil.cli.ccp_stencil.main:main"
+bat-stencil = "batstencil.cli.bat_stencil.main:main"
 
 [project.urls]
-Homepage = "https://github.com/ccpgames/ccp-stencil"
-Documentation = "https://github.com/ccpgames/ccp-stencil/blob/main/README.md"
-Repository = "https://github.com/ccpgames/ccp-stencil.git"
-Issues = "https://github.com/ccpgames/ccp-stencil/issues"
-Changelog = "https://github.com/ccpgames/ccp-stencil/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/doddi79/bat-stencil"
+Documentation = "https://github.com/doddi79/bat-stencil/blob/main/README.md"
+Repository = "https://github.com/doddi79/bat-stencil.git"
+Issues = "https://github.com/doddi79/bat-stencil/issues"
+Changelog = "https://github.com/doddi79/bat-stencil/blob/main/CHANGELOG.md"
 
 [tool.setuptools.dynamic]
-version = {attr = "ccpstencil.__version__"}
+version = {attr = "batstencil.__version__"}
 
 [tool.setuptools.packages.find]
 where = [ "." ]
-exclude = [ "tests", "tests.*" ]
+include = [ "batstencil", "batstencil.*" ]
